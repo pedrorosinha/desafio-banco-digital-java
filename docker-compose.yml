@@ -1,0 +1,45 @@
+services:
+  database:
+    image: postgres:16-alpine
+    container_name: postgres-banco-digital
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${DB_NAME:-banco_digital}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_NAME:-banco_digital}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - banco-digital-network
+
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api-banco-digital
+    ports:
+      - "${SERVER_PORT}:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/${DB_NAME:-banco_digital}
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - banco-digital-network
+
+volumes:
+  postgres_data:
+
+networks:
+  banco-digital-network:
+    driver: bridge
