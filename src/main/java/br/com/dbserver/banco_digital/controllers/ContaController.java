@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import br.com.dbserver.banco_digital.dto.conta.ContaAtualizarRequest;
 import br.com.dbserver.banco_digital.dto.conta.ContaRequest;
 import br.com.dbserver.banco_digital.dto.conta.ContaResponse;
 import br.com.dbserver.banco_digital.service.BancoDigitalService;
@@ -31,7 +32,7 @@ public class ContaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ContaResponse> atualizarConta(@PathVariable Long id,
-            @Valid @RequestBody ContaRequest request) {
+            @Valid @RequestBody ContaAtualizarRequest request) {
         ContaResponse response = bancoDigitalService.atualizarConta(id, request);
         return ResponseEntity.ok(response);
     }

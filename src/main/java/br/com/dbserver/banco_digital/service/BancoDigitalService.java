@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.dbserver.banco_digital.dto.conta.ContaAtualizarRequest;
 import br.com.dbserver.banco_digital.dto.conta.ContaRequest;
 import br.com.dbserver.banco_digital.dto.conta.ContaResponse;
 import br.com.dbserver.banco_digital.dto.transacao.TransacaoRequest;
@@ -47,7 +48,7 @@ public class BancoDigitalService {
     }
 
     @Transactional
-    public ContaResponse atualizarConta(Long id, ContaRequest request) {
+    public ContaResponse atualizarConta(Long id, ContaAtualizarRequest request) {
         Conta conta = contaRepository.findByIdWithLock(id)
                 .orElseThrow(() -> new ContaNaoEncontradaException(MSG_CONTA_NAO_ENCONTRADA));
 
