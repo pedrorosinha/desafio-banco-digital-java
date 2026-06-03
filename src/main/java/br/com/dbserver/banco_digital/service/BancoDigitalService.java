@@ -21,6 +21,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BancoDigitalService {
 
+    private static final String MSG_CONTA_NAO_ENCONTRADA = "Conta não encontrada.";
+    private static final String MSG_TRANSACAO_NAO_ENCONTRADA = "Transação não encontrada.";
+
     private final ContaRepository contaRepository;
     private final TransacaoRepository transacaoRepository;
     private final NotificacaoService notificacaoService;
@@ -34,6 +37,30 @@ public class BancoDigitalService {
 
         Conta contaSalva = contaRepository.save(novaConta);
         return ContaResponse.fromEntity(contaSalva);
+    }
+
+    @Transactional(readOnly = true)
+    public ContaResponse buscarPorId(Long id) {
+        Conta conta = contaRepository.findById(id)
+                .orElseThrow(() -> new ContaNaoEncontradaException(MSG_CONTA_NAO_ENCONTRADA));
+        return ContaResponse.fromEntity(conta);
+    }
+
+    @Transactional
+    public ContaResponse atualizarConta(Long id, ContaRequest request) {
+        Conta conta = contaRepository.findByIdWithLock(id)
+                .orElseThrow(() -> new ContaNaoEncontradaException(MSG_CONTA_NAO_ENCONTRADA));
+
+        conta.setNomeTitular(request.nomeTitular());
+        Conta contaAtualizada = contaRepository.save(conta);
+        return ContaResponse.fromEntity(contaAtualizada);
+    }
+
+    @Transactional
+    public void deletarConta(Long id) {
+        Conta conta = contaRepository.findById(id)
+                .orElseThrow(() -> new ContaNaoEncontradaException(MSG_CONTA_NAO_ENCONTRADA));
+        contaRepository.delete(conta);
     }
 
     @Transactional
@@ -71,5 +98,19 @@ public class BancoDigitalService {
         notificacaoService.enviarNotificacaoTransferencia(origem, destino, request.valor());
 
         return TransacaoResponse.fromEntity(transacaoSalva);
+    }
+
+    @Transactional(readOnly = true)
+    public TransacaoResponse buscarTransacaoPorId(Long id) {
+        Transacao transacao = transacaoRepository.findById(id)
+                .orElseThrow(() -> new ContaNaoEncontradaException(MSG_TRANSACAO_NAO_ENCONTRADA));
+        return TransacaoResponse.fromEntity(transacao);
+    }
+
+    @Transactional
+    public void deletarTransacao(Long id) {
+        Transacao transacao = transacaoRepository.findById(id)
+                .orElseThrow(() -> new ContaNaoEncontradaException(MSG_TRANSACAO_NAO_ENCONTRADA));
+        transacaoRepository.delete(transacao);
     }
 }
