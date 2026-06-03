@@ -58,6 +58,13 @@ A API estará disponível em `http://localhost:8080`.
 
 ---
 
+## Documentação da API (Swagger UI)
+A API conta com documentação interativa automatizada. Assim que a aplicação estiver rodando, você poderá visualizar, testar e enviar requisições para todos os endpoints diretamente pelo navegador:
+
+Swagger UI (Interface Gráfica): `http://localhost:8080/swagger-ui.html`
+
+OpenAPI Specs (JSON Bruto): `http://localhost:8080/api-docs`
+
 ## Executando os Testes Automatizados
 
 A suíte de testes cobre detalhadamente as regras de negócio da camada Service (incluindo concorrência e fluxos assíncronos) e a integração da camada Controller (testando contratos de payload e tratamento global de exceções do Jackson).
@@ -212,6 +219,7 @@ banco_digital
  │    │    ├── conta
  │    │    └── transacao
  │    ├── exception       # GlobalExceptionHandler e Exceções Customizadas
+ │    ├── infra           # Componentes de Infraestrutura, Segurança e Configurações Externas
  │    ├── models          # Entidades JPA (Conta, Transacao)
  │    ├── repository      # Interfaces de Acesso ao Banco com travas PESSIMISTIC_WRITE
  │    └── service         # Camada de Regras de Negócio e Serviços Assíncronos
