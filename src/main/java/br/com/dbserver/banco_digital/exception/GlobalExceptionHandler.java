@@ -7,7 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+import tools.jackson.databind.exc.UnrecognizedPropertyException;
 
 import br.com.dbserver.banco_digital.exception.especies.ContaNaoEncontradaException;
 import br.com.dbserver.banco_digital.exception.especies.SaldoInsuficienteException;
@@ -26,8 +26,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<String> handleHttpMessageNotReadableException(
-            HttpMessageNotReadableException ex) {
+    public ResponseEntity<String> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
 
         if (ex.getCause() instanceof UnrecognizedPropertyException unrecognizedPropertyException) {
             String mensagem = String.format("O campo '%s' não é permitido nesta requisição.",
@@ -44,7 +43,7 @@ public class GlobalExceptionHandler {
         String mensagemErro = ex.getBindingResult().getFieldErrors().stream()
                 .map(error -> error.getDefaultMessage())
                 .findFirst()
-                .orElse("Erro de validação nos dados enviiados.");
+                .orElse("Erro de validação nos dados enviados.");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensagemErro);
     }
 }
