@@ -1,5 +1,7 @@
 package br.com.dbserver.banco_digital.dto.transacao;
 
+import java.math.BigDecimal;
+
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
@@ -12,5 +14,5 @@ public record TransacaoRequest(
     
     @NotNull(message = "O valor da transação é obrigatório")
     @Positive(message = "O valor da transação deve ser positivo")
-    String valor
+    BigDecimal valor
 ) {}
