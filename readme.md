@@ -1,4 +1,3 @@
-```markdown
 # Banco Digital API
 
 Uma API RESTful desenvolvida em Java com Spring Boot para simular as operações essenciais de um banco digital. O projeto foca em boas práticas de design de software, consistência de dados através de travas pessimistas (`findByIdWithLock`) para evitar condições de corrida (*race conditions*) e imutabilidade do histórico financeiro.
